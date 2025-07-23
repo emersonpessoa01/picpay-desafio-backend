@@ -2,9 +2,11 @@ package br.com.emersonpesoa.picpay_desafio_backend.transaction;
 
 import org.springframework.stereotype.Service;
 
+import br.com.emersonpesoa.picpay_desafio_backend.exception.InvalidTransactionException;
 import br.com.emersonpesoa.picpay_desafio_backend.wallet.TransactionRepository;
 import br.com.emersonpesoa.picpay_desafio_backend.wallet.Wallet;
 import br.com.emersonpesoa.picpay_desafio_backend.wallet.WalletType;
+import jakarta.transaction.Transactional;
 
 @Service
 public class TransactionService {
@@ -16,7 +18,7 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
         this.walletRepository = walletRepository;
     }
-
+    @Transactional
     public Transaction createTransaction(Transaction transaction) {
         // 1- Validar as tansações com base na regra de
         validate(transaction);
@@ -43,8 +45,9 @@ public class TransactionService {
                         .map(payer -> isTransactionValid(transaction, payer)
                                 ? transaction
                                 : null)
-                        .orElseThrow())
-                .orElseThrow();
+                        .orElseThrow(
+                                () -> new InvalidTransactionException("Invalid transaction %s".formatted(transaction))))
+                .orElseThrow(() -> new InvalidTransactionException("Invalid transaction %s".formatted(transaction)));
 
     }
 
