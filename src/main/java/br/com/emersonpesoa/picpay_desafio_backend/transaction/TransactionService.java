@@ -2,7 +2,7 @@ package br.com.emersonpesoa.picpay_desafio_backend.transaction;
 
 import org.springframework.stereotype.Service;
 
-import br.com.emersonpesoa.picpay_desafio_backend.exception.InvalidTransactionException;
+import br.com.emersonpesoa.picpay_desafio_backend.authorization.AuthorizerService;
 import br.com.emersonpesoa.picpay_desafio_backend.wallet.TransactionRepository;
 import br.com.emersonpesoa.picpay_desafio_backend.wallet.Wallet;
 import br.com.emersonpesoa.picpay_desafio_backend.wallet.WalletType;
@@ -12,12 +12,16 @@ import jakarta.transaction.Transactional;
 public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final WalletRepository walletRepository;
+    private final AuthorizerService authorizerService;
 
     public TransactionService(TransactionRepository transactionRepository,
-            WalletRepository walletRepository) {
+            WalletRepository walletRepository,
+            AuthorizerService authorizerService) {
         this.transactionRepository = transactionRepository;
         this.walletRepository = walletRepository;
+        this.authorizerService = authorizerService;
     }
+
     @Transactional
     public Transaction createTransaction(Transaction transaction) {
         // 1- Validar as tansações com base na regra de
@@ -30,6 +34,8 @@ public class TransactionService {
         walletRepository.save(wallet.debit(transaction.value()));
 
         // 4 - Chamar serviços
+        // authorize transaction
+        authorizerService.authorize(newTransaction);
         return newTransaction;
 
     }
