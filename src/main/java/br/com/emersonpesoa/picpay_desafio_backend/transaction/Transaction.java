@@ -8,7 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Table(name = "transactions")
+@Table(name = "TRANSACTIONS")
 public record Transaction(
     @Id Long id,
     Long payer,
