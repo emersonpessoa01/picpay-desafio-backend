@@ -5,9 +5,11 @@ import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+@Entity
 @Table(name = "TRANSACTIONS")
 public record Transaction(
     @Id Long id,
