@@ -3,8 +3,9 @@ package br.com.emersonpesoa.picpay_desafio_backend.transaction;
 import org.springframework.stereotype.Service;
 
 import br.com.emersonpesoa.picpay_desafio_backend.authorization.AuthorizerService;
-import br.com.emersonpesoa.picpay_desafio_backend.wallet.TransactionRepository;
+import br.com.emersonpesoa.picpay_desafio_backend.notification.NotificationService;
 import br.com.emersonpesoa.picpay_desafio_backend.wallet.Wallet;
+import br.com.emersonpesoa.picpay_desafio_backend.wallet.WalletRepository;
 import br.com.emersonpesoa.picpay_desafio_backend.wallet.WalletType;
 import jakarta.transaction.Transactional;
 
@@ -13,6 +14,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final WalletRepository walletRepository;
     private final AuthorizerService authorizerService;
+    private final NotificationService notificationService;
 
     public TransactionService(TransactionRepository transactionRepository,
             WalletRepository walletRepository,
@@ -20,6 +22,7 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
         this.walletRepository = walletRepository;
         this.authorizerService = authorizerService;
+        this.notificationService = new NotificationService();
     }
 
     @Transactional
@@ -35,9 +38,12 @@ public class TransactionService {
 
         // 4 - Chamar serviços
         // authorize transaction
-        authorizerService.authorize(newTransaction);
-        return newTransaction;
+        authorizerService.authorize(transaction);
 
+        //Notificação
+        notificationService.notify(transaction);
+
+        return newTransaction;
     }
 
     /*
