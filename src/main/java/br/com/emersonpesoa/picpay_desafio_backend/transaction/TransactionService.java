@@ -1,5 +1,7 @@
 package br.com.emersonpesoa.picpay_desafio_backend.transaction;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import br.com.emersonpesoa.picpay_desafio_backend.authorization.AuthorizerService;
@@ -67,5 +69,9 @@ public class TransactionService {
         return payer.type() == WalletType.COMUM.getValue()
                 && payer.balance().compareTo(transaction.value()) >= 0
                 && !payer.id().equals(transaction.payee());
+    }
+
+    public List<Transaction> list() {
+       return transactionRepository.findAll();
     }
 }
