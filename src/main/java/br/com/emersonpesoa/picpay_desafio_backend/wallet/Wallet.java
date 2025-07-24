@@ -2,8 +2,10 @@ package br.com.emersonpesoa.picpay_desafio_backend.wallet;
 
 import java.math.BigDecimal;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+@Entity
 public record Wallet(
         @Id Long id,
         String fullName,
