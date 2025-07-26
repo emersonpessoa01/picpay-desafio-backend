@@ -1,6 +1,9 @@
 version: "3.8"
 
 services:
+  backend:
+    ports:
+      - "8081:8081"
   kafka:
     image: "bitnami/kafka:latest"
     ports:
