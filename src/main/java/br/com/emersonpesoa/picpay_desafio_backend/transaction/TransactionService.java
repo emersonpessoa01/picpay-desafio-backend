@@ -20,11 +20,11 @@ public class TransactionService {
 
     public TransactionService(TransactionRepository transactionRepository,
             WalletRepository walletRepository,
-            AuthorizerService authorizerService) {
+            AuthorizerService authorizerService, NotificationService notificationService) {
         this.transactionRepository = transactionRepository;
         this.walletRepository = walletRepository;
         this.authorizerService = authorizerService;
-        this.notificationService = new NotificationService();
+        this.notificationService = notificationService;
     }
 
     @Transactional
@@ -37,6 +37,8 @@ public class TransactionService {
         // 3 - Debitar da carteira
         var walletPayer = walletRepository.findById(transaction.getPayer()).get();
         var walletPayee = walletRepository.findById(transaction.getPayee()).get();
+
+        // Atualizar as carteiras
         walletRepository.save(walletPayer.debit(transaction.getValue()));
         walletRepository.save(walletPayee.credit(transaction.getValue()));
 
@@ -44,7 +46,7 @@ public class TransactionService {
         // authorize transaction
         authorizerService.authorize(transaction);
 
-        //Notificação
+        // Notificação
         notificationService.notify(transaction);
 
         return newTransaction;
@@ -74,6 +76,6 @@ public class TransactionService {
     }
 
     public List<Transaction> list() {
-       return transactionRepository.findAll();
+        return transactionRepository.findAll();
     }
 }
