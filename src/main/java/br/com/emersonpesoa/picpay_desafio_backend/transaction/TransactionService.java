@@ -35,8 +35,10 @@ public class TransactionService {
         var newTransaction = transactionRepository.save(transaction);
 
         // 3 - Debitar da carteira
-        var wallet = walletRepository.findById(transaction.payer()).get();
-        walletRepository.save(wallet.debit(transaction.value()));
+        var walletPayer = walletRepository.findById(transaction.getPayer()).get();
+        var walletPayee = walletRepository.findById(transaction.getPayee()).get();
+        walletRepository.save(walletPayer.debit(transaction.getValue()));
+        walletRepository.save(walletPayee.credit(transaction.getValue()));
 
         // 4 - Chamar serviços
         // authorize transaction
@@ -54,8 +56,8 @@ public class TransactionService {
      * - 0 pagador não poder ser o recebedor
      */
     private void validate(Transaction transaction) {
-        walletRepository.findById(transaction.payee())
-                .map(payee -> walletRepository.findById(transaction.payer())
+        walletRepository.findById(transaction.getPayee())
+                .map(payee -> walletRepository.findById(transaction.getPayer())
                         .map(payer -> isTransactionValid(transaction, payer)
                                 ? transaction
                                 : null)
@@ -66,9 +68,9 @@ public class TransactionService {
     }
 
     private boolean isTransactionValid(Transaction transaction, Wallet payer) {
-        return payer.type() == WalletType.COMUM.getValue()
-                && payer.balance().compareTo(transaction.value()) >= 0
-                && !payer.id().equals(transaction.payee());
+        return payer.getType() == WalletType.COMUM.getValue()
+                && payer.getBalance().compareTo(transaction.getValue()) >= 0
+                && !payer.getId().equals(transaction.getPayee());
     }
 
     public List<Transaction> list() {
