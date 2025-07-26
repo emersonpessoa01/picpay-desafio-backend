@@ -36,7 +36,7 @@ git clone https://github.com/giuliana-bezerra/picpay-desafio-backend.git
 docker-compose up
 ```
 - Executar a aplicação Spring Boot
-- Acessar aplicação em `http://localhost:8080`.
+- Acessar aplicação em `http://localhost:8081`.
 
 ## Arquitetura
 
@@ -46,7 +46,7 @@ docker-compose up
 
 ## API
 
-- http :8080/transaction value=100.0 payer=1 payee=200
+- http :8081/transaction value=100.0 payer=1 payee=200
 ```
 HTTP/1.1 200
 Connection: keep-alive
@@ -55,16 +55,18 @@ Date: Tue, 05 Mar 2024 19:07:52 GMT
 Keep-Alive: timeout=60
 Transfer-Encoding: chunked
 
-{
-    "createdAt": "2024-03-05T16:07:50.749774",
-    "id": 20,
-    "payee": 2,
-    "payer": 1,
-    "value": 100.0
-}
+[
+	{
+		"id": 2,
+		"payer": 1,
+		"payee": 2,
+		"value": 100.00,
+		"createdAt": "26-07-2025 14:50:56"
+	}
+]
 ```
 
-- http :8080/transaction
+- http :8081/transaction
 ```
 HTTP/1.1 200
 Connection: keep-alive
@@ -74,12 +76,32 @@ Keep-Alive: timeout=60
 Transfer-Encoding: chunked
 
 [
-    {
-        "createdAt": "2024-03-05T16:07:50.749774",
-        "id": 20,
-        "payee": 2,
-        "payer": 1,
-        "value": 100.0
-    }
+	{
+		"id": 2,
+		"payer": 1,
+		"payee": 2,
+		"value": 100.00,
+		"createdAt": "26-07-2025 14:50:56"
+	}
 ]
 ```
+
+### Na requisição POST para criar uma transação pode ser feita tanto no **Postman** quanto no **Insomnia**.
+
+## Como usar no Postman ou Insomnia:
+
+1. Selecione o método **POST**.
+2. Informe a URL do endpoint: `http://localhost:8081/transaction`
+3. Vá até a aba **Body**.
+4. Escolha o formato **JSON** (raw JSON).
+5. Cole o corpo da requisição:
+
+```
+  {
+    "payer": 1,
+    "payee": 2,
+    "value": 150.00
+  }
+```
+
+
