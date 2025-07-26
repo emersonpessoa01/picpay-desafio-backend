@@ -1,9 +1,11 @@
+/* Clear WALLETS */
 DELETE FROM
     TRANSACTIONS;
 
 DELETE FROM
     WALLETS;
 
+/* Insert wallets */
 INSERT INTO
     WALLETS (
         ID,
@@ -18,7 +20,7 @@ VALUES
     (
         1,
         'Joao - User',
-        12345678901,
+        12345678900,
         'joao@test.com',
         '123456',
         1,
@@ -36,10 +38,10 @@ INSERT INTO
         BALANCE
     )
 VALUES
-(
+    (
         2,
-        'Maria - User',
-        98765432101,
+        'Maria - Lojista',
+        12345678901,
         'maria@test.com',
         '123456',
         2,
