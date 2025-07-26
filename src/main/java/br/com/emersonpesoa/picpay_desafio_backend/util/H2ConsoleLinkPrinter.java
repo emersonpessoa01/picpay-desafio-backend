@@ -10,5 +10,6 @@ public class H2ConsoleLinkPrinter {
     public void printH2ConsoleLink() {
         String url = "http://localhost:8081/h2-console";
         System.out.println("H2 Console disponível em: " + url);
+        System.out.println("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
     }
 }
